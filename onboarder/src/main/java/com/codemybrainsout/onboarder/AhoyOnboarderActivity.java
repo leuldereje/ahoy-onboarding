@@ -33,7 +33,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
     private CircleIndicatorView circleIndicatorView;
     private ViewPager vpOnboarderPager;
     private AhoyOnboarderAdapter ahoyOnboarderAdapter;
-    private TextView btnSkip;
+    private TextView btnSkip,textViewSkipOnBoarding;
     private ImageView ivNext, ivPrev;
     private FrameLayout navigationControls;
     private FrameLayout buttonsLayout;
@@ -57,6 +57,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
         parentLayout = (RelativeLayout) findViewById(R.id.parent_layout);
         circleIndicatorView = (CircleIndicatorView) findViewById(R.id.circle_indicator_view);
         btnSkip = (TextView) findViewById(R.id.btn_skip);
+        textViewSkipOnBoarding = (TextView) findViewById(R.id.textViewSkip);
         buttonsLayout = (FrameLayout) findViewById(R.id.buttons_layout);
         navigationControls = (FrameLayout) findViewById(R.id.navigation_layout);
         ivNext = (ImageView) findViewById(R.id.ivNext);
@@ -81,6 +82,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
         mCardShadowTransformer.enableScaling(true);
         vpOnboarderPager.setAdapter(ahoyOnboarderAdapter);
         vpOnboarderPager.setPageTransformer(false, mCardShadowTransformer);
+        textViewSkipOnBoarding.setOnClickListener(this);
         circleIndicatorView.setPageIndicators(pages.size());
 
     }
@@ -110,6 +112,8 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
             vpOnboarderPager.setCurrentItem(vpOnboarderPager.getCurrentItem() - 1);
         } else if (i == R.id.ivNext && !isInLastPage) {
             vpOnboarderPager.setCurrentItem(vpOnboarderPager.getCurrentItem() + 1);
+        } else if(i == R.id.textViewSkip) {
+            onSkipButtonPressed();
         }
     }
 
@@ -135,10 +139,12 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
             fadeOut(ivPrev);
             fadeIn(ivNext);
             hideFinish();
+            textViewSkipOnBoarding.setVisibility(View.VISIBLE);
             fadeIn(circleIndicatorView);
         } else {
             fadeIn(circleIndicatorView);
             hideFinish();
+            textViewSkipOnBoarding.setVisibility(View.VISIBLE);
             fadeIn(ivPrev);
             fadeIn(ivNext);
         }
@@ -146,6 +152,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
         if (solidBackground && (pages.size() == colorList.size())) {
             backgroundImage.setBackgroundColor(ContextCompat.getColor(this, colorList.get(position)));
         }
+        onboardCardChanges(position);
 
     }
 
@@ -218,6 +225,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
 
     private void showFinish() {
         btnSkip.setVisibility(View.VISIBLE);
+        textViewSkipOnBoarding.setVisibility(View.GONE);
         this.btnSkip.animate().translationY(0 - dpToPixels(5, this)).setInterpolator(new DecelerateInterpolator()).setDuration(500).start();
     }
 
@@ -263,6 +271,8 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
     }
 
     abstract public void onFinishButtonPressed();
+    abstract public void onSkipButtonPressed();
+    abstract public void onboardCardChanges(int toPosition);
 
     public void showNavigationControls(boolean navigation) {
         if (navigation) {
@@ -311,6 +321,15 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
     public void setActiveIndicatorColor(int color) {
         this.circleIndicatorView.setActiveIndicatorColor(color);
     }
+    
+    public void setTextSkipButton(String text) {
+        this.textViewSkipOnBoarding.setText(text);
+    }
+
+    public void setColorTextSkipButton(int color) {
+        this.textViewSkipOnBoarding.setTextColor(color);
+    }
+
 
     /**
      * <br/><br/>
