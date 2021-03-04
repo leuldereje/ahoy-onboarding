@@ -17,6 +17,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,7 +34,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
     private CircleIndicatorView circleIndicatorView;
     private ViewPager vpOnboarderPager;
     private AhoyOnboarderAdapter ahoyOnboarderAdapter;
-    private TextView btnSkip,textViewSkipOnBoarding;
+    private Button btnSkip,textViewSkipOnBoarding;
     private ImageView ivNext, ivPrev;
     private FrameLayout navigationControls;
     private FrameLayout buttonsLayout;
@@ -56,7 +57,7 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
 
         parentLayout = (RelativeLayout) findViewById(R.id.parent_layout);
         circleIndicatorView = (CircleIndicatorView) findViewById(R.id.circle_indicator_view);
-        btnSkip = (TextView) findViewById(R.id.btn_skip);
+        btnSkip = (Button) findViewById(R.id.btn_skip);
         textViewSkipOnBoarding = (TextView) findViewById(R.id.textViewSkip);
         buttonsLayout = (FrameLayout) findViewById(R.id.buttons_layout);
         navigationControls = (FrameLayout) findViewById(R.id.navigation_layout);
@@ -352,6 +353,21 @@ public abstract class AhoyOnboarderActivity extends AppCompatActivity implements
     public void setFinishButtonTitle(@StringRes int titleResId) {
         btnSkip.setText(titleResId);
     }
+    
+        /**
+     * <br/><br/>
+     * <b>N.B. Builds before LOLLIPOP will use the default style</b>
+     * <br/><br/>
+     * Set the color of the skip/done button, <br/>
+     *
+     * @param colorResId A color res representing your button color
+     */
+    public void setFinishButtonBackground(@ColorRes int colorResId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnSkip.setBackgroundTintList(ContextCompat.getColorStateList(this, colorResId));
+        }
+    }
+
 
     public void setFont(Typeface typeface) {
         this.btnSkip.setTypeface(typeface);
